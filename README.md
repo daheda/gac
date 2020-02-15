@@ -15,12 +15,12 @@ cd %{DOC_ROOT}% && git clone https://github.com/daheda/gac.git && cd gac
 
 2- Import the data structure
 ```
-mysql -u%{DB_USER}% -p < init.sql
+mysql -u%{DB_USER}% -p < ./data/init.sql
 ```
 
 ## Configuration
 
-Before runing the application, it may need to change values in './config/config.php'
+Before runing the application, it might need to change values in './config/config.php'
 
 ## Credits
 - https://www.php-fig.org/psr/psr-4/examples/

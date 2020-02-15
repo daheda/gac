@@ -13,8 +13,8 @@ class Config {
     
     /**
     * in case you setup the application outside the docroot
-    * eg: if your access it like: http://localhost/path/to/
-    * then the value should be : path/to
+    * eg: if your access it like: http://localhost/path/to/public
+    * then the value should be : path/to/public
     */
     const APP_BASEPATH = '';
 }
