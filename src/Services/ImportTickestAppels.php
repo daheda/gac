@@ -8,6 +8,7 @@ class ImportTickestAppels
 
     private $numberImported = 0;
     private $numberError = 0;
+    private $typeIdCache = [];
 
     const TABLE_DETAIL = 'detail_appel';
     const TABLE_TYPE_APPEL = 'type_appel';
@@ -28,25 +29,22 @@ class ImportTickestAppels
 
     private function getTypeAppel(array $data)
     {
+        $typeId = null;
+        if (in_array($data[self::CSV_TYPE_FACTURE], $this->typeIdCache)){
+            return $this->typeIdCache[$data[self::CSV_TYPE_FACTURE]];
+        }
         try {
-             $statement = $this->connection->prepare("SELECT * FROM ".self::TABLE_TYPE_APPEL." WHERE libelle=:libelle ");
-             $statement->bindParam(':libelle', $data[self::CSV_TYPE_FACTURE]);
-             if ($statement->execute()) {
-                $result = $statement->fetch(\PDO::FETCH_ASSOC);
-             }
-             if (isset($result['id'])) {
-                return $result['id'];
-             } else {
-                $statement = $this->connection->prepare("INSERT INTO ".self::TABLE_TYPE_APPEL." (libelle) VALUES (:libelle)");
-                $statement->bindParam(':libelle', $data[self::CSV_TYPE_FACTURE]);
-                if ($statement->execute()) {
-                    return $this->connection->lastInsertId(); 
-                 }
-             }
+            $statement = $this->connection->prepare("INSERT INTO ".self::TABLE_TYPE_APPEL." (libelle) VALUES (:libelle)");
+            $statement->bindParam(':libelle', $data[self::CSV_TYPE_FACTURE]);
+            if ($statement->execute()) {
+                $typeId = $this->connection->lastInsertId(); 
+            }
+            $this->typeIdCache[$data[self::CSV_TYPE_FACTURE]] = $typeId;
+            return $typeId;
         } catch (\Exception $e){
             throw $e;
         }
-        return null;
+        return $typeId;
     }
 
     private function getNumberOfSecondes($time)

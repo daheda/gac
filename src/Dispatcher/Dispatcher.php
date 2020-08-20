@@ -5,7 +5,7 @@ class Dispatcher
 {
     public static function Dispatch()
     {
-        $action = $_REQUEST['action'];
+        $action = $_REQUEST['action'] ?? '';
         $controller = new \Gac\Controller\MainController();
         $view = \Gac\View\Phtml::getInstance(\Config::TEMPLATE_DIR);
 
